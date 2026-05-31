@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Idle OCG Pack Opening Prototype</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="phone" aria-label="Pack Opening Sequence prototype">
+      <section class="stage" id="stage">
+        <div class="ambient ambient-a"></div>
+        <div class="ambient ambient-b"></div>
+
+        <header class="hud">
+          <div>
+            <span class="kicker">Idle OCG</span>
+            <h1>Pack Opening</h1>
+          </div>
+          <div class="counter" id="counter">0 / 5</div>
+        </header>
+
+        <div class="rare-field" id="rareField"></div>
+
+        <section class="pack-scene" id="packScene" aria-label="Gothic Pack">
+          <div class="tear-track" id="tearTrack">
+            <div class="tear-fill" id="tearFill"></div>
+            <div class="tear-glint"></div>
+          </div>
+          <div class="pack-shell" id="packShell">
+            <img src="./assets/gothic-pack.png" alt="Sealed Gothic Pack" draggable="false">
+            <div class="pack-lid"></div>
+            <div class="pack-rip" id="packRip"></div>
+          </div>
+        </section>
+
+        <section class="card-zone" id="cardZone" aria-label="Card Stack"></section>
+
+        <section class="summary" id="summary" aria-label="Pack Summary" hidden>
+          <div class="summary-head">
+            <span class="kicker">Pack Summary</span>
+            <h2>Five Reveals</h2>
+          </div>
+          <div class="summary-grid" id="summaryGrid"></div>
+          <button class="next-pack" id="nextPack" type="button">Next Pack</button>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
