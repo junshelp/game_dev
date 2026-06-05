@@ -26,6 +26,10 @@ Run a sample Codex Harness product-planning workflow for the Idle OCG pack-openi
 - GitHub labels `ready-for-agent` and `afk` were created and applied.
 - Five GitHub issues were created in `junshelp/game_dev`.
 - The user approved updating the local backlog with published GitHub issue URLs.
+- The user approved commit creation.
+- Commit `0073182 Add pack opening polish planning workflow` was created.
+- The user approved pushing.
+- Commit `0073182` was pushed to `origin/main`.
 
 ## Unresolved Questions
 
@@ -45,6 +49,4 @@ Run a sample Codex Harness product-planning workflow for the Idle OCG pack-openi
 
 ## Approval Gates Pending
 
-- User approval before commit creation.
-- User approval before push.
-- User approval before pull request creation.
+- User approval before pull request creation, if a pull request is still desired. The planning workflow is already on `main`.

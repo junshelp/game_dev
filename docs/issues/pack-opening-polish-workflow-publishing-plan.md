@@ -1,6 +1,8 @@
 # Pack Opening Prototype Polish Workflow Publishing Plan
 
-This plan is prepared after user approval of the local issue breakdown in `docs/issues/pack-opening-polish-workflow-backlog.md`. It does not grant permission to create GitHub issues, commit, push, or open a pull request.
+This plan was prepared after user approval of the local issue breakdown in `docs/issues/pack-opening-polish-workflow-backlog.md`. GitHub issues were later created, the local backlog was updated with issue URLs, and the planning artifacts were committed and pushed to `origin/main`.
+
+This document is now a publication record for the completed planning workflow. It does not grant permission to open a pull request.
 
 ## Target Repository
 
@@ -13,7 +15,7 @@ This plan is prepared after user approval of the local issue breakdown in `docs/
 
 ## Issue Creation Order
 
-Create blocker-free issues first, then dependent issues:
+The intended creation order was blocker-free issues first, then dependent issues:
 
 1. `Polish face-up Reveal Swipe after the initial face-down moment`
 2. `Tighten Tear Gesture, Tear Guide, and pack-open transition feel`
@@ -23,29 +25,37 @@ Create blocker-free issues first, then dependent issues:
 
 ## Labels
 
-The repository label vocabulary is not confirmed in local planning docs.
+The following labels were created and applied:
 
-Before GitHub issue creation, choose one:
-
-- publish without labels
-- provide the label or labels to apply
-- inspect repository labels, then ask for confirmation before creating issues
+- `ready-for-agent`
+- `afk`
 
 ## Parent Issue
 
 No parent issue has been provided.
 
-If a parent issue should be linked, provide it before GitHub issue creation.
-
 ## Local Backlog Update After Publishing
 
-If GitHub issues are created, update `docs/issues/pack-opening-polish-workflow-backlog.md` only after approval to add published issue URLs while preserving the original local draft bodies.
+The user approved updating `docs/issues/pack-opening-polish-workflow-backlog.md` with published issue URLs. The backlog now preserves the local draft bodies and includes the GitHub issue links.
+
+## Published Issues
+
+- #1: `Guard pack generation, Highlight Card placement, and Rare Signal truthfulness`
+  - https://github.com/junshelp/game_dev/issues/1
+- #2: `Tighten Tear Gesture, Tear Guide, and pack-open transition feel`
+  - https://github.com/junshelp/game_dev/issues/2
+- #3: `Polish face-up Reveal Swipe after the initial face-down moment`
+  - https://github.com/junshelp/game_dev/issues/3
+- #4: `Improve Card Stack readability, Prototype Card legibility, and Pack Summary fit`
+  - https://github.com/junshelp/game_dev/issues/4
+- #5: `Establish behavior checks for the Pack Opening Sequence polish loop`
+  - https://github.com/junshelp/game_dev/issues/5
 
 ## Proposed Commit Scope
 
-Commit only after explicit commit approval.
+The user approved commit creation.
 
-Recommended files to include:
+Committed files included:
 
 - `docs/pack-opening-polish-workflow-prd.md`
 - `docs/issues/pack-opening-polish-workflow-backlog.md`
@@ -55,21 +65,21 @@ Recommended files to include:
 - `_workspace/product-planning/results/pack-polish-domain-slices.md`
 - `_workspace/product-planning/results/pack-polish-harness-gates.md`
 - `_workspace/product-planning/summary.md`
+- `_workspace/product-planning/github-issue-bodies/`
+- `_workspace/product-planning/github-issue-publish-result.md`
 
-Do not include unrelated pre-existing working tree changes unless the user explicitly approves that expanded scope.
+Unrelated pre-existing working tree changes were not included.
 
-## Proposed Commit Message
+## Commit And Push
 
-`Add pack opening polish planning workflow`
+- Commit: `0073182 Add pack opening polish planning workflow`
+- Branch: `main`
+- Pushed to: `origin/main`
 
 ## Approval Gates Pending
 
-1. User approval before creating GitHub issues.
-2. User approval before updating the local backlog with published issue URLs.
-3. User approval before creating a commit.
-4. User approval before pushing.
-5. User approval before opening a pull request.
+1. User approval before opening a pull request, if a pull request is still desired.
 
 ## Next Required Approval
 
-Approve GitHub issue creation for the five listed issues, and specify whether to publish without labels, provide labels, or inspect labels first.
+The planning workflow is already on `main`, so a pull request is not normally applicable unless a new branch or follow-up change is requested.
