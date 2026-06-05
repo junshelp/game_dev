@@ -11,6 +11,7 @@ const nextPack = document.querySelector("#nextPack");
 
 const TEAR_THRESHOLD = 0.72;
 const REVEAL_THRESHOLD = 0.42;
+const FACE_UP_DELAY_MS = 360;
 const CARD_NAMES = {
   vampire: "Nocturne Countess",
   succubus: "Velvet Hex Matron",
@@ -27,6 +28,8 @@ const CARD_POOL = [
   { key: "demon", image: "./assets/card-demon.png", rarity: "gold", rare: true },
 ];
 
+let cardIdSeed = 0;
+
 const state = {
   phase: "unopened",
   tearProgress: 0,
@@ -37,6 +40,9 @@ const state = {
   hasHighlight: false,
   drag: null,
   audio: null,
+  faceUpTimer: null,
+  packAnimation: null,
+  stackTimer: null,
 };
 
 function clamp(value, min, max) {
@@ -52,16 +58,26 @@ function shuffle(items) {
   return copy;
 }
 
+function makeCardId() {
+  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+  cardIdSeed += 1;
+  return `prototype-card-${Date.now().toString(36)}-${cardIdSeed}`;
+}
+
+function makeCardCopy(card) {
+  return { ...card, id: makeCardId() };
+}
+
 function makePack() {
   const hasHighlight = Math.random() < 0.72;
   const highlightIndex = hasHighlight ? 3 + Math.floor(Math.random() * 2) : -1;
   const nonRare = shuffle(CARD_POOL.filter((card) => !card.rare));
-  const cards = nonRare.slice(0, 4).map((card) => ({ ...card, id: crypto.randomUUID() }));
+  const cards = nonRare.slice(0, 4).map(makeCardCopy);
 
   if (hasHighlight) {
-    cards.splice(highlightIndex, 0, { ...CARD_POOL.find((card) => card.rare), id: crypto.randomUUID() });
+    cards.splice(highlightIndex, 0, makeCardCopy(CARD_POOL.find((card) => card.rare)));
   } else {
-    cards.push({ ...nonRare[0], id: crypto.randomUUID() });
+    cards.push(makeCardCopy(nonRare[0]));
   }
 
   return { cards: cards.slice(0, 5), hasHighlight, highlightIndex };
@@ -84,7 +100,12 @@ function updateCounter() {
 
 function resetLoop() {
   const pack = makePack();
-  packShell.getAnimations().forEach((animation) => animation.cancel());
+  window.clearTimeout(state.faceUpTimer);
+  window.clearTimeout(state.stackTimer);
+  state.packAnimation?.cancel();
+  state.packAnimation = null;
+  packShell.getAnimations?.().forEach((animation) => animation.cancel());
+  packShell.classList.remove("opening", "opened");
   packShell.style.transform = "";
   state.cards = pack.cards;
   state.hasHighlight = pack.hasHighlight;
@@ -92,6 +113,8 @@ function resetLoop() {
   state.index = 0;
   state.revealed = [];
   state.drag = null;
+  state.faceUpTimer = null;
+  state.stackTimer = null;
   setTearProgress(0);
   setPhase("unopened");
   cardZone.replaceChildren();
@@ -146,6 +169,8 @@ function signalRare(strong = false) {
 }
 
 function renderStack(animateIn = true) {
+  window.clearTimeout(state.faceUpTimer);
+  state.faceUpTimer = null;
   cardZone.replaceChildren();
   state.cards.slice(state.index).forEach((card, offset) => {
     const el = document.createElement("article");
@@ -153,6 +178,7 @@ function renderStack(animateIn = true) {
     el.dataset.cardId = card.id;
     el.style.setProperty("--y", `${offset * 11 + (animateIn ? 80 : 0)}px`);
     el.style.setProperty("--scale", `${1 - offset * 0.045}`);
+    el.style.setProperty("--flip", "0deg");
     el.style.zIndex = String(20 - offset);
     el.style.opacity = offset > 3 ? "0" : "1";
     el.innerHTML = `
@@ -174,7 +200,9 @@ function renderStack(animateIn = true) {
     });
 
     if (offset === 0) {
+      el.classList.add("current", "suspense");
       el.addEventListener("pointerdown", onCardPointerDown);
+      state.faceUpTimer = window.setTimeout(() => revealCardFace(el), animateIn ? FACE_UP_DELAY_MS + 160 : FACE_UP_DELAY_MS);
     }
   });
 }
@@ -183,22 +211,33 @@ function openPack() {
   setPhase("opened");
   setTearProgress(1);
   playTone("tear");
-  packShell.animate(
-    [
-      { transform: "translateY(0) rotate(0deg) scale(1)" },
-      { transform: "translateY(-14px) rotate(-2deg) scale(1.03)" },
-      { transform: "translateY(130px) rotate(1deg) scale(.86)" },
-    ],
-    { duration: 620, easing: "cubic-bezier(.2,.8,.18,1)", fill: "forwards" },
-  );
+  packShell.classList.add("opening", "opened");
+  if (typeof packShell.animate === "function") {
+    try {
+      state.packAnimation = packShell.animate(
+        [
+          { transform: "translateY(0) rotate(0deg) scale(1)" },
+          { transform: "translateY(-14px) rotate(-2deg) scale(1.03)" },
+          { transform: "translateY(130px) rotate(1deg) scale(.86)" },
+        ],
+        { duration: 620, easing: "cubic-bezier(.2,.8,.18,1)", fill: "forwards" },
+      );
+    } catch {
+      state.packAnimation = null;
+      packShell.style.transform = "translateY(130px) rotate(1deg) scale(.86)";
+    }
+  } else {
+    packShell.style.transform = "translateY(130px) rotate(1deg) scale(.86)";
+  }
   if (state.hasHighlight) {
     window.setTimeout(() => signalRare(false), 220);
   }
-  window.setTimeout(() => {
+  state.stackTimer = window.setTimeout(() => {
+    state.stackTimer = null;
     setPhase("cards");
     renderStack(true);
     playTone("stack");
-  }, 540);
+  }, 760);
 }
 
 function onTearPointerDown(event) {
@@ -245,11 +284,21 @@ function currentCardEl() {
   return cardZone.querySelector(".card");
 }
 
+function revealCardFace(el) {
+  if (!el || !el.isConnected || !el.classList.contains("current")) return;
+  el.classList.remove("suspense");
+  el.classList.add("face-up");
+  el.style.setProperty("--flip", "0deg");
+}
+
 function onCardPointerDown(event) {
   if (state.phase !== "cards" && state.phase !== "revealing") return;
   const el = currentCardEl();
   if (!el || event.currentTarget !== el) return;
   ensureAudio();
+  window.clearTimeout(state.faceUpTimer);
+  state.faceUpTimer = null;
+  revealCardFace(el);
   setPhase("revealing");
   state.drag = {
     type: "card",
@@ -263,10 +312,9 @@ function onCardPointerDown(event) {
 }
 
 function setCardDrag(el, progress, dx) {
-  const flip = Math.abs(progress) * 180;
   el.style.setProperty("--x", `${dx}px`);
   el.style.setProperty("--rz", `${progress * 8}deg`);
-  el.style.setProperty("--flip", `${flip}deg`);
+  el.style.setProperty("--flip", "0deg");
 }
 
 function onCardPointerMove(event) {
@@ -305,11 +353,13 @@ function completeReveal(el, direction) {
   el.classList.add("exiting");
   el.style.setProperty("--x", `${direction * (stage.clientWidth + 180)}px`);
   el.style.setProperty("--rz", `${direction * 18}deg`);
-  el.style.setProperty("--flip", "180deg");
+  el.style.setProperty("--flip", "0deg");
 
   window.setTimeout(() => {
     state.index += 1;
     if (state.index >= state.cards.length) {
+      window.clearTimeout(state.faceUpTimer);
+      state.faceUpTimer = null;
       showSummary();
     } else {
       setPhase("cards");
