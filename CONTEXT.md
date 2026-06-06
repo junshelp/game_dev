@@ -16,6 +16,46 @@ _Avoid_: pack animation, opening animation, card draw
 The sealed pack presented at the start of a Pack Opening Sequence. A Gothic Pack should visually belong to the same dark fantasy world as the Monster Girl Cards, using cues such as dark material, metallic seals, wax marks, occult ornament, and colored magical light.
 _Avoid_: neutral pack, modern foil pack, generic booster
 
+**Gothic Pack Earning**:
+The idle process that produces Gothic Packs over time. An Isometric Idle Expedition may later shorten or improve this process through dungeon events, but time remains the baseline source of packs.
+_Avoid_: loot drop, quest reward, manual farming
+
+**Isometric Idle Expedition**:
+The idle environment where a character automatically explores a gothic dungeon and turns waiting into progress toward Gothic Packs. It gives the player a visible reason packs are being earned, but it is not a directly controlled dungeon RPG.
+_Avoid_: playable dungeon crawler, action RPG, manual exploration
+
+**Expedition View**:
+The wide idle screen that presents an Isometric Idle Expedition as the player's default view. It favors a readable desktop or window-sized isometric scene with compact navigation controls, while Pack Opening Sequence remains a focused overlay expansion.
+_Avoid_: phone frame, landing page, battle screen
+
+**Borderless Expedition Overlay**:
+The target desktop form of an Expedition View, shown above the operating system taskbar without a normal window frame so Expedition Watching feels present while the player works. A small window fallback is acceptable when true borderless overlay behavior is not available.
+_Avoid_: full desktop game window, normal app chrome, forced fullscreen
+
+**Expanded Pack Opening View**:
+The temporary focused state where a Borderless Expedition Overlay grows upward into a medium Pack Opening Sequence view. It preserves the taskbar-adjacent idle UI position while giving the Gothic Pack enough space for a deliberate Tear Gesture and Card Reveals.
+_Avoid_: separate reward window, tiny pack modal, fullscreen takeover
+
+**Procedural Expedition Layout**:
+The generated arrangement of rooms, corridors, props, and automatic walking paths shown during an Isometric Idle Expedition. It creates visual variety for Expedition Watching without making dungeon completion the source of Gothic Pack Earning.
+_Avoid_: loot dungeon, combat map, player route
+
+**Expedition Watching**:
+The player's passive relationship to an Isometric Idle Expedition. The player may observe the character's automatic progress and enter a Pack Opening Sequence when a Gothic Pack is ready, but does not direct movement, attacks, or routing.
+_Avoid_: character control, tactical commands, path selection
+
+**Pack Ready Signal**:
+A compact interface cue that tells the player one or more Gothic Packs are ready to open while they are viewing the Isometric Idle Expedition. A Pack Ready Signal may appear as a red dot or similar badge on a Pack Navigation Button, but it should not interrupt Expedition Watching by forcing a Pack Opening Sequence.
+_Avoid_: forced popup, auto-open prompt, reward claim modal
+
+**Pack Navigation Button**:
+A persistent interface control that lets the player leave Expedition Watching and enter an Expanded Pack Opening View when a Gothic Pack is ready. It is a navigation affordance, not the Pack Opening Sequence itself.
+_Avoid_: reward claim button, shop button, pack modal
+
+**Collection Codex**:
+A future view where the player can review collected cards outside a Pack Opening Sequence. During the Isometric Idle Expedition prototype, a codex button may exist as a placeholder, but collection review is not part of the prototype's core behavior.
+_Avoid_: inventory, card management, deck editor
+
 **Tear Gesture**:
 A direct left-to-right player gesture across the top tear line of a sealed pack. A Tear Gesture should make the player feel they caused the pack to open, rather than watched an automatic animation.
 _Avoid_: tap to open, auto open, skip open
@@ -75,6 +115,33 @@ Domain expert: "It is the payoff of the idle loop. The player waits to earn a pa
 
 Developer: "Can the pack open automatically after the player taps it?"
 Domain expert: "No. The opening should require a Tear Gesture so the player feels personally responsible for releasing the cards."
+
+Developer: "Is the isometric dungeon a playable action RPG?"
+Domain expert: "No. It is an Isometric Idle Expedition: the character explores automatically, and that visible waiting produces Gothic Packs."
+
+Developer: "Does the player need to clear dungeon rooms to earn packs?"
+Domain expert: "No. Gothic Pack Earning is time-based first; dungeon events may later shorten the wait or improve the next pack."
+
+Developer: "What does the player do in the dungeon view?"
+Domain expert: "They use Expedition Watching. The character moves and fights automatically, and the player steps in when a Gothic Pack is ready to open."
+
+Developer: "Does a random dungeon room create the pack reward?"
+Domain expert: "No. The Procedural Expedition Layout gives the idle scene variety, while Gothic Pack Earning remains based on time."
+
+Developer: "Should the idle dungeon use the same portrait phone frame as the Pack Opening Sequence prototype?"
+Domain expert: "No. The Expedition View should be wide and readable for desktop or window-sized watching, then transition into the focused Pack Opening Sequence when opening a pack."
+
+Developer: "Does the desktop companion need to be a normal app window?"
+Domain expert: "No. The target is a Borderless Expedition Overlay above the taskbar, with a small window fallback when the operating system cannot support that behavior."
+
+Developer: "Where does the player open a ready pack from the overlay?"
+Domain expert: "The overlay expands into an Expanded Pack Opening View, keeping the idle UI anchored near the taskbar while giving the Pack Opening Sequence enough space to feel tactile."
+
+Developer: "Should the pack open on top of the dungeon view?"
+Domain expert: "No. A Pack Navigation Button can show a Pack Ready Signal, then the overlay grows into an Expanded Pack Opening View."
+
+Developer: "Does the first idle dungeon prototype need a card collection screen?"
+Domain expert: "No. A Collection Codex button can be present as a placeholder, but the prototype should focus on Expedition Watching and opening ready Gothic Packs."
 
 Developer: "What happens if the player drags but does not commit the gesture?"
 Domain expert: "Use Elastic Return. The interaction should recover through motion, not scold the player with a message."
